@@ -1,0 +1,56 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.lli.com'
+    compileSdk 36
+
+    def ksFile = new File(rootProject.projectDir, 'keystore/legends-release.jks')
+    def ksPass = new File(rootProject.projectDir, 'keystore/password.txt').text.trim()
+
+    signingConfigs {
+        release {
+            storeFile ksFile
+            storePassword ksPass
+            keyAlias 'legends'
+            keyPassword ksPass
+        }
+    }
+
+    defaultConfig {
+        applicationId "com.oranthia.world"
+        minSdk 21
+        targetSdk 33
+        versionCode 100
+        versionName "1.0.0"
+        ndk {
+            abiFilters "arm64-v8a", "armeabi-v7a", "x86_64"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    buildFeatures {
+        viewBinding false
+        buildConfig true
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'io.github.webrtc-sdk:android:137.7151.05'
+    implementation 'com.squareup.okhttp3:okhttp:4.11.0'
+}
